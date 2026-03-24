@@ -3,11 +3,13 @@ const express = require("express");
 const authRoutes = require("./authRoutes");
 const incomeRoutes = require("./incomeRoutes");
 const expneseRoutes = require("./expenseRoutes");
+const dashboardRoutes = require("./dashboardRoutes");
 
 const router = express.Router();
 
 router.use("/auth", authRoutes);
 router.use("/income", incomeRoutes);
 router.use("/expense", expneseRoutes);
+router.use("/dashboard", dashboardRoutes);
 
 module.exports = router;
