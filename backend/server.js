@@ -21,7 +21,7 @@ app.use(express.json());
 
 connectDB();
 
-app.use("/api/v1", route);
+app.use("/", route);
 
 app.use("/upload", express.static(path.join(__dirname, "uploads")));
 
