@@ -9,6 +9,10 @@ import Home from "./pages/Dashboard/Home";
 import Income from "./pages/Dashboard/Income";
 import Expense from "./pages/Dashboard/Expense";
 
+import toast, { Toaster } from "react-hot-toast";
+
+import UserProvider from "./providers/UserProvider";
+
 const App = () => {
   const router = createBrowserRouter([
     {
@@ -41,9 +45,12 @@ const App = () => {
     },
   ]);
   return (
-    <div>
-      <RouterProvider router={router} />
-    </div>
+    <UserProvider>
+      <div>
+        <RouterProvider router={router} />
+        <Toaster position="top-center" />
+      </div>
+    </UserProvider>
   );
 };
 
@@ -55,6 +62,11 @@ const Root = () => {
   return isAuthenticated ? (
     <Navigate to="/dashboard" replace />
   ) : (
-    <Navigate to="/login" replace />
+    //todo: 登录过期时，提示用户重新登录
+    toast.error("请先登录！") || (
+      <>
+        <Navigate to="/login" replace />
+      </>
+    )
   );
 };
