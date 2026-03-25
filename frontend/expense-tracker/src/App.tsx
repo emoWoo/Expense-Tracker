@@ -53,8 +53,8 @@ const Root = () => {
   const isAuthenticated = !!localStorage.getItem("token");
   console.log("isAuthenticated:", isAuthenticated);
   return isAuthenticated ? (
-    <Navigate to="/dashboard" />
+    <Navigate to="/dashboard" replace />
   ) : (
-    <Navigate to="/login" />
+    <Navigate to="/login" replace />
   );
 };
