@@ -89,7 +89,11 @@ const Login = () => {
           </button>
           <p className="text-[13px] text-slate-800 mt-3">
             没有账号？{" "}
-            <Link to="/signup" className="font-medium text-primary underline">
+            <Link
+              to="/signup"
+              replace
+              className="font-medium text-primary underline"
+            >
               注册
             </Link>
           </p>
