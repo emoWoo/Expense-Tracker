@@ -47,6 +47,7 @@ const ProfilePhotoSelect: React.FC<ProfilePhotoSelectProps> = ({
           <LuUser className="text-4xl text-primary" />
 
           <button
+            type="button"
             className="w-8 h-8 flex items-center justify-center bg-primary text-white rounded-full absolute -bottom-1 -right-1"
             onClick={onChooseFile}
           >
@@ -61,6 +62,7 @@ const ProfilePhotoSelect: React.FC<ProfilePhotoSelectProps> = ({
             alt=""
           />
           <button
+            type="button"
             className="w-8 h-8 flex items-center justify-center bg-red-500 text-white rounded-full absolute -bottom-1 -right-1"
             onClick={handleRemoveImage}
           >
