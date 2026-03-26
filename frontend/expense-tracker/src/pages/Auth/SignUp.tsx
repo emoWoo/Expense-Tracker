@@ -1,9 +1,13 @@
 import AuthLayout from "../../components/layouts/AuthLayout";
 import Input from "../../components/Input/Input";
 import ProfilePhotoSelect from "../../components/Input/ProfilePhotoSelect";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { validateEmail } from "../../utils/helper";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { authApi } from "../../api/auth";
+import { toast } from "react-hot-toast";
+import { UserContext } from "../../contexts/UserContext";
+import axios from "axios";
 
 const SignUp = () => {
   const [profilePic, setProfilePic] = useState<File | null>(null);
@@ -13,7 +17,23 @@ const SignUp = () => {
 
   const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate();
+
+  const { updateUser } = useContext(UserContext)!;
+
+  const uploadProfileImage = async (
+    profilePic: File,
+  ): Promise<string | null> => {
+    try {
+      const response = await authApi.uploadImage(profilePic);
+      return response.data.profileImageUrl;
+    } catch (error) {
+      throw new Error("上传头像失败，请稍后重试！");
+      return null;
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!fullName) {
@@ -36,6 +56,37 @@ const SignUp = () => {
     }
 
     setError("");
+    let profileImageUrl: string | null = "";
+    try {
+      if (profilePic) {
+        profileImageUrl = await uploadProfileImage(profilePic);
+      }
+
+      const data = {
+        fullName,
+        email,
+        password,
+        profileImageUrl,
+      };
+      const res = await toast.promise(authApi.register(data), {
+        loading: "数据提交中...",
+        success: "注册成功！",
+      });
+
+      const { token, user } = res.data;
+      localStorage.setItem("token", token);
+      updateUser(user);
+      navigate("/dashboard", { replace: true });
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const message =
+          (error.response?.data as { message?: string } | undefined)?.message ||
+          "注册失败，请检查你的信息！";
+        toast.error(message);
+      } else {
+        toast.error("注册失败，请稍后重试！");
+      }
+    }
   };
 
   return (
@@ -80,7 +131,11 @@ const SignUp = () => {
 
           <p className="text-[13px] text-slate-800 mt-3">
             已经有账号了？{" "}
-            <Link to="/login" className="font-medium text-primary underline">
+            <Link
+              replace
+              to="/login"
+              className="font-medium text-primary underline"
+            >
               登录
             </Link>
           </p>
