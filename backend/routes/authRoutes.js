@@ -13,6 +13,6 @@ const router = express.Router();
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.get("/userinfo", protect, getUserInfo);
-router.post("/upload-image", upload.single("profileImage"), uploadProfileImage);
+router.post("/upload-image", upload.single("file"), uploadProfileImage);
 
 module.exports = router;
