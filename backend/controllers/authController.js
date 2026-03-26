@@ -50,16 +50,17 @@ exports.loginUser = async (req, res) => {
     if (!user) {
       return res.status(400).json({ message: "用户不存在！" });
     }
+
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "密码错误！" });
+    }
+
     res.status(200).json({
       _id: user._id,
       user,
       token: generateToken(user._id),
     });
-
-    const isMatch = user.comparePassword(password);
-    if (!isMatch) {
-      return res.status(400).json({ message: "密码错误！" });
-    }
   } catch (error) {
     res.status(500).json({ message: "登录失败", error: error.message });
   }
