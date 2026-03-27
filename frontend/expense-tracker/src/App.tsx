@@ -63,10 +63,6 @@ const Root = () => {
     <Navigate to="/dashboard" replace />
   ) : (
     //todo: 登录过期时，提示用户重新登录
-    toast.error("请先登录！") || (
-      <>
-        <Navigate to="/login" replace />
-      </>
-    )
+    <Navigate to="/login" replace />
   );
 };
