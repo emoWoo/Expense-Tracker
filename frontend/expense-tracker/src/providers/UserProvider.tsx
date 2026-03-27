@@ -1,19 +1,20 @@
 import { useState } from "react";
 import { UserContext } from "../contexts/UserContext";
+import type { User } from "../contexts/UserContext";
 
 type Props = {
   children: React.ReactNode;
 };
 
 const UserProvider = ({ children }: Props) => {
-  const [user, setUser] = useState<object>({});
+  const [user, setUser] = useState<User | null>(null);
 
-  const updateUser = (userData: object) => {
+  const updateUser = (userData: User) => {
     setUser(userData);
   };
 
   const clearUser = () => {
-    setUser({});
+    setUser(null);
   };
 
   return (

@@ -1,8 +1,15 @@
 import { createContext } from "react";
 
+export interface User {
+  id: string;
+  fullName: string;
+  email: string;
+  profileImageUrl?: string;
+}
+
 type UserContextType = {
-  user: object;
-  updateUser: (userData: object) => void;
+  user: User | null;
+  updateUser: (userData: User) => void;
   clearUser: () => void;
 };
 
