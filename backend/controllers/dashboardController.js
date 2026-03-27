@@ -23,7 +23,7 @@ exports.getDashboardData = async (req, res) => {
       { $group: { _id: null, total: { $sum: "$amount" } } },
     ]);
 
-    //计算最近60天的收入和最近30天的花费
+    //计算最近60天的收入
     const last60DaysIncomeTransactions = await Income.find({
       userId,
       date: { $gte: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000) },
