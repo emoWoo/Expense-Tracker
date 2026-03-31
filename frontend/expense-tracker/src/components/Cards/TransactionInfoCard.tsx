@@ -4,15 +4,17 @@ import {
   LuTrendingDown,
   LuTrash2,
 } from "react-icons/lu";
+import type { IconType } from "react-icons";
 import { addThounsandsSeparate } from "../../utils/helper";
 
 interface TransactionInfoCardProps {
-  title: string;
-  icon: string;
+  title: string | null;
+  icon: IconType | null;
   date: string;
   amount: number;
   type: "income" | "expense";
   hideDeleteBtn?: boolean;
+  onDelete?: () => void;
 }
 
 const TransactionInfoCard: React.FC<TransactionInfoCardProps> = ({
@@ -22,20 +24,18 @@ const TransactionInfoCard: React.FC<TransactionInfoCardProps> = ({
   amount,
   type,
   hideDeleteBtn,
+  onDelete,
 }) => {
   const getAmountStyle = () => {
     return type === "income"
       ? "bg-green-100 text-green-500"
       : "bg-red-100 text-red-500";
   };
+  const Icon = icon ? icon : LuUtensils;
   return (
     <div className=" group relative flex items-center gap-4 mt-2 p-3 rounded-lg hover:bg-gray-100/60">
       <div className="w-12 h-12 flex items-center justify-center text-xl text-gray-800 bg-gray-100 rounded-full">
-        {!icon ? (
-          <img src={icon} alt={title} className="w-6 h-6" />
-        ) : (
-          <LuUtensils className="" />
-        )}
+        <Icon />
       </div>
 
       <div className="flex flex-1 items-center justify-between">
@@ -46,7 +46,10 @@ const TransactionInfoCard: React.FC<TransactionInfoCardProps> = ({
 
         <div className="flex items-center gap-2">
           {!hideDeleteBtn && (
-            <button className="text-gray-400 hover:text-red-500">
+            <button
+              className="text-gray-400 hover:text-red-500"
+              onClick={onDelete}
+            >
               <LuTrash2 size={18} />
             </button>
           )}
