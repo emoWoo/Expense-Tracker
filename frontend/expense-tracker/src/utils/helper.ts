@@ -1,5 +1,5 @@
-import type { Transaction } from "../pages/Dashboard/Home";
-
+import dayjs from "dayjs";
+import type { Transaction } from "../types/transaction";
 export const validateEmail = (email: string): boolean => {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return regex.test(email);
@@ -39,7 +39,6 @@ export const prepareExpenseBarChartData = (data: Transaction[]) => {
 };
 
 export const prepareIncomePieChartData = (data: Transaction[]) => {
-  console.log("Preparing pie chart data from transactions:", data);
   const chartData = data.map((item) => {
     return {
       name: item?.source || "其他",
@@ -47,5 +46,18 @@ export const prepareIncomePieChartData = (data: Transaction[]) => {
     };
   });
 
+  return chartData;
+};
+
+export const prepareIncomeBarChartData = (data: Transaction[]) => {
+  const sortData = [...data].sort(
+    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+  );
+
+  const chartData = sortData.map((item) => ({
+    month: dayjs(item?.date).format("YYYY-MM"),
+    amount: item?.amount || 0,
+    source: item?.source || "其他",
+  }));
   return chartData;
 };
