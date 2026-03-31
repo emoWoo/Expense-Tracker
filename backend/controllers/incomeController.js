@@ -6,7 +6,7 @@ exports.addIncome = async (req, res) => {
   const userId = req.user.id;
 
   try {
-    const { icon, source, amount, date } = req.body;
+    const { description, source, amount, date } = req.body;
 
     if (!source || !amount || !date) {
       return res.status(400).json({ message: "请提供完整的收入信息！" });
@@ -14,7 +14,7 @@ exports.addIncome = async (req, res) => {
 
     const newIncome = await Income.create({
       userId,
-      icon,
+      description,
       source,
       amount,
       date: new Date(date),
@@ -68,6 +68,7 @@ exports.downloadIncomeExcel = async (req, res) => {
     const incomes = await Income.find({ userId }).sort({ date: -1 });
 
     const data = incomes.map((income) => ({
+      Description: income.description,
       Source: income.source,
       Amount: income.amount,
       Date: income.date,
