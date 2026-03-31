@@ -24,7 +24,7 @@ const Input: React.FC<InputProps> = ({
 
   return (
     <div>
-      <label className="text-[13px] text-slate -800">{label}:</label>
+      <label className="text-[13px] text-slate-800">{label}:</label>
       <div className="input-box">
         <input
           className="w-full bg-transparent outline-none"
