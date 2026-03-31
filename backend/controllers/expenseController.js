@@ -6,15 +6,15 @@ exports.addExpense = async (req, res) => {
   const userId = req.user.id;
 
   try {
-    const { icon, category, amount, date } = req.body;
+    const { description, category, amount, date } = req.body;
 
-    if (!category || !amount) {
+    if (!category || !amount || !description) {
       return res.status(400).json({ message: "请提供完整的收入信息！" });
     }
 
     const newExpense = await Expense.create({
       userId,
-      icon,
+      description,
       category,
       amount,
       date: new Date(date),
