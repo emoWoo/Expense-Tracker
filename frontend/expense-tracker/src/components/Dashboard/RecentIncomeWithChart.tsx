@@ -1,5 +1,5 @@
 import CustomPieChart from "../Charts/CustomPieChart";
-import type { Transaction } from "../../pages/Dashboard/Home";
+import type { Transaction } from "../../types/transaction";
 import { prepareIncomePieChartData } from "../../utils/helper";
 import { useMemo } from "react";
 interface RecentIncomeWithChartProps {
