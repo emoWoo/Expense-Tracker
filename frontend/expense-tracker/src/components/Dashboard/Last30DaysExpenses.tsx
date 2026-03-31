@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import type { Transaction } from "../../pages/Dashboard/Home";
+import type { Transaction } from "../../types/transaction";
 import { prepareExpenseBarChartData } from "../../utils/helper";
 import CustomBarChart from "../Charts/CustomBarChart";
 
@@ -19,7 +19,7 @@ const Last30DaysExpenses = ({ transactions }: Last30DaysExpensesProps) => {
         <h5 className="text-lg">近30天的支出</h5>
       </div>
 
-      <CustomBarChart data={chartData} />
+      <CustomBarChart data={chartData} type="expense" />
     </div>
   );
 };
