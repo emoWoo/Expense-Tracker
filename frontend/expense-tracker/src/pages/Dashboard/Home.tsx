@@ -14,15 +14,8 @@ import ExpenseTransactions from "../../components/Dashboard/ExpenseTransactions"
 import Last30DaysExpenses from "../../components/Dashboard/Last30DaysExpenses";
 import RecentIncomeWithChart from "../../components/Dashboard/RecentIncomeWithChart";
 import RecentIncome from "../../components/Dashboard/RecentIncome";
+import type { Transaction } from "../../types/transaction";
 
-export interface Transaction {
-  _id: string;
-  amount: number;
-  category?: string;
-  source?: string;
-  icon: string;
-  date: string;
-}
 interface DashboardData {
   totalBalance: number;
   totalIncome: number;
