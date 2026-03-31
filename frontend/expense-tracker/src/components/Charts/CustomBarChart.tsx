@@ -11,7 +11,8 @@ import {
 import { addThounsandsSeparate } from "../../utils/helper";
 
 type ChartDataItem = {
-  category: string;
+  source?: string;
+  category?: string;
   amount: number;
 };
 
@@ -30,12 +31,13 @@ type CustomTooltipProps = {
 };
 
 const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
-  console.log("Tooltip payload:", payload);
   if (active && payload && payload.length) {
     return (
       <div className="bg-white shadow-md rounded-lg p-2 border border-gray-300">
         <p className="text-xs font-semibold text-purple-800 mb-1">
-          {payload[0].payload.category}
+          {payload[0].payload.category ||
+            payload[0].payload.source ||
+            "Unknown"}
         </p>
         <p className="text-sm text-gray-600">
           数目:{" "}
@@ -49,14 +51,18 @@ const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
   return null;
 };
 
-const CustomBarChart = ({ data }: { data: ChartDataItem[] }) => {
+type CustomBarChartProps = {
+  data: ChartDataItem[];
+  type: "income" | "expense";
+};
+const CustomBarChart = ({ data, type }: CustomBarChartProps) => {
   return (
     <div className="bg-white mt-6">
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={data}>
           <CartesianGrid stroke="#eee" vertical={false} />
           <XAxis
-            dataKey="category"
+            dataKey={type === "income" ? "source" : "category"}
             tick={{ fontSize: 12, fill: "#555" }}
             stroke="none"
           />
