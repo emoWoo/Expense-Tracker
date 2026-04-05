@@ -32,7 +32,24 @@ exports.getAllIncome = async (req, res) => {
 
   try {
     const allIncome = await Income.find({ userId }).sort({ date: -1 });
-    res.status(200).json({ message: "获取收入成功！", income: allIncome });
+    const groupedIncome = Object.values(
+      allIncome.reduce((acc, item) => {
+        const dateKey = new Date(item.date).toISOString().split("T")[0];
+
+        if (!acc[dateKey]) {
+          acc[dateKey] = {
+            date: dateKey,
+            income: [],
+          };
+        }
+
+        acc[dateKey].income.push(item);
+        return acc;
+      }, {}),
+    );
+    res
+      .status(200)
+      .json({ message: "获取收入成功！", incomes: allIncome, groupedIncome });
   } catch (error) {
     res.status(500).json({ message: "获取收入失败！", error: error.message });
   }
