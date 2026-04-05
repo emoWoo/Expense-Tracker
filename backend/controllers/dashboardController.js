@@ -13,10 +13,6 @@ exports.getDashboardData = async (req, res) => {
       { $match: { userId: userObjectId } },
       { $group: { _id: null, total: { $sum: "$amount" } } },
     ]);
-    console.log("Total Income:", {
-      totalIncome,
-      userId: isValidObjectId(userId),
-    });
 
     const totalExpense = await Expense.aggregate([
       { $match: { userId: userObjectId } },
@@ -43,6 +39,32 @@ exports.getDashboardData = async (req, res) => {
       (sum, transaction) => sum + transaction.amount,
       0,
     );
+    const last30DaysExpenseGroup = Object.values(
+      last30DaysExpenseTransactions.reduce((group, transaction) => {
+        const date = new Date(transaction.date).toISOString().split("T")[0];
+        const category = transaction.category || "other";
+
+        if (!group[date]) {
+          group[date] = {
+            date,
+            expenseMap: {},
+          };
+        }
+
+        if (!group[date].expenseMap[category]) {
+          group[date].expenseMap[category] = 0;
+        }
+
+        group[date].expenseMap[category] += transaction.amount || 0;
+        return group;
+      }, {}),
+    ).map((item) => ({
+      date: item.date,
+      expense: Object.entries(item.expenseMap).map(([category, amount]) => ({
+        category,
+        amount,
+      })),
+    }));
 
     //获取最近的5笔收入和5笔花费
     const lastTransactions = [
@@ -68,6 +90,7 @@ exports.getDashboardData = async (req, res) => {
       last30DaysExpenses: {
         total: expenseLast30Days,
         transactions: last30DaysExpenseTransactions,
+        expenseGroup: last30DaysExpenseGroup,
       },
       last60DaysIncomes: {
         total: incomeLast60Days,
