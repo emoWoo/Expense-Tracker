@@ -32,7 +32,26 @@ exports.getAllExpense = async (req, res) => {
 
   try {
     const allExpense = await Expense.find({ userId }).sort({ date: -1 });
-    res.status(200).json({ message: "获取花费成功！", Expense: allExpense });
+    const groupedExpense = Object.values(
+      allExpense.reduce((acc, item) => {
+        const dateKey = new Date(item.date).toISOString().split("T")[0];
+
+        if (!acc[dateKey]) {
+          acc[dateKey] = {
+            date: dateKey,
+            expense: [],
+          };
+        }
+
+        acc[dateKey].expense.push(item);
+        return acc;
+      }, {}),
+    );
+    res.status(200).json({
+      message: "获取花费成功！",
+      expense: allExpense,
+      groupedExpense,
+    });
   } catch (error) {
     res.status(500).json({ message: "获取花费失败！", error: error.message });
   }
@@ -68,7 +87,7 @@ exports.downloadExpenseExcel = async (req, res) => {
     const Expenses = await Expense.find({ userId }).sort({ date: -1 });
 
     const data = Expenses.map((Expense) => ({
-      种类: Expense.category,
+      类别: Expense.category,
       数目: Expense.amount,
       日期: Expense.date,
     }));
