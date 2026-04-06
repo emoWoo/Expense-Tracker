@@ -38,7 +38,7 @@ const Income = () => {
         : await req;
 
       if (res.data) {
-        setIncomeData(res.data.income);
+        setIncomeData(res.data.incomes);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -88,6 +88,7 @@ const Income = () => {
       }
     }
   };
+
   const handleDelIncome = async (id: string) => {
     try {
       await toast.promise(incomeApi.deleteIcome(id), {
@@ -107,6 +108,7 @@ const Income = () => {
       }
     }
   };
+
   const handleEditIncome = async () => {};
 
   useEffect(() => {
