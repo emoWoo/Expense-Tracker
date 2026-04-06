@@ -1,10 +1,15 @@
 import { useMemo } from "react";
-import type { Transaction } from "../../types/transaction";
 import { prepareExpenseBarChartData } from "../../utils/helper";
 import CustomBarChart from "../Charts/CustomBarChart";
+import type { Transaction } from "../../types/transaction";
+
+interface GroupedExpenseItem {
+  date: string;
+  expense: Transaction[];
+}
 
 interface Last30DaysExpensesProps {
-  transactions: Transaction[];
+  transactions: GroupedExpenseItem[];
 }
 
 const Last30DaysExpenses = ({ transactions }: Last30DaysExpensesProps) => {
