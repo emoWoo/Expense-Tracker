@@ -79,14 +79,15 @@ export const prepareIncomeBarChartData = (
       ),
       activity: item.income.map((incomeItem) => ({
         name:
-          EXPENSE_CATEGORY_CONFIG.find(
-            (configItem) => configItem.value === incomeItem.category,
+          INCOME_SOURCE_CONFIG.find(
+            (configItem) => configItem.value === incomeItem.source,
           )?.label || "其他",
         amount: incomeItem.amount || 0,
       })),
     }))
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 };
+
 export const prepareExpenseLineChartData = (
   data: { date: string; expense: Transaction[] }[],
 ) => {
