@@ -1,6 +1,7 @@
 import { LuArrowRight } from "react-icons/lu";
-import type { Transaction } from "../../pages/Dashboard/Home";
+import type { Transaction } from "../../types/transaction";
 import TransactionInfoCard from "../Cards/TransactionInfoCard";
+import { EXPENSE_CATEGORY_CONFIG } from "../../constants/expenseConfig";
 import dayjs from "dayjs";
 
 interface ExpenseTransactionsProps {
@@ -12,7 +13,6 @@ const ExpenseTransactions = ({
   transactions,
   onSeeMore,
 }: ExpenseTransactionsProps) => {
-  console.log("ExpenseTransactions transactions:", transactions);
   return (
     <div className="card">
       <div className="flex items-center justify-between ">
@@ -25,17 +25,23 @@ const ExpenseTransactions = ({
       </div>
 
       <div className="mt-6">
-        {transactions?.slice(0, 5)?.map((i) => (
-          <TransactionInfoCard
-            key={i._id}
-            title={i.category || ""}
-            icon={i.icon || ""}
-            date={dayjs(i.date).format("YYYY-MM-DD")}
-            amount={i.amount}
-            type="expense"
-            hideDeleteBtn
-          />
-        ))}
+        {transactions?.slice(0, 5)?.map((i) => {
+          const categoryConfig =
+            EXPENSE_CATEGORY_CONFIG.find((item) => item.value === i.category) ||
+            EXPENSE_CATEGORY_CONFIG.find((item) => item.value === "other");
+
+          return (
+            <TransactionInfoCard
+              key={i._id}
+              icon={categoryConfig?.icon}
+              description={i.description}
+              date={dayjs(i.date).format("YYYY-MM-DD")}
+              amount={i.amount}
+              type="expense"
+              hideDeleteBtn
+            />
+          );
+        })}
       </div>
     </div>
   );
