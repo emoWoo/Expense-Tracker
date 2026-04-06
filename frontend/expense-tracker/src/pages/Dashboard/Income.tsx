@@ -20,6 +20,7 @@ const Income = () => {
   useUserAuth();
 
   const [incomeData, setIncomeData] = useState([]);
+  const [incomeGroup, setIncomeGroup] = useState([]);
   const [openAddIncomeModel, setOpenAddIncomeModal] = useState(false);
   const addIncomeFormRef = useRef<AddIncomeFormRef>(null);
   const [openDelAlert, setOpenDelAlert] = useState({
@@ -39,6 +40,7 @@ const Income = () => {
 
       if (res.data) {
         setIncomeData(res.data.incomes);
+        setIncomeGroup(res.data.groupedIncome);
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -125,7 +127,7 @@ const Income = () => {
         <div className="grid grid-cols-1 gap-6">
           <div className="">
             <IncomeOverview
-              transactions={incomeData}
+              transactions={incomeGroup}
               onAddIncome={() => setOpenAddIncomeModal(true)}
             />
           </div>
