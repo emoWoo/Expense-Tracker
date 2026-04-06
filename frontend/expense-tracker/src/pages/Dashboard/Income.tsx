@@ -73,12 +73,12 @@ const Income = () => {
       return;
     }
     try {
+      setOpenAddIncomeModal(false);
       await toast.promise(incomeApi.addIcome(income), {
         loading: "正在添加收入...",
         success: "收入添加成功！",
       });
       await fetchIncomeData(false);
-      setOpenAddIncomeModal(false);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const message =
@@ -144,7 +144,10 @@ const Income = () => {
 
         <CustomModal
           isOpen={openAddIncomeModel}
-          onClose={() => setOpenAddIncomeModal(false)}
+          onClose={() => {
+            addIncomeFormRef.current?.resetForm();
+            setOpenAddIncomeModal(false);
+          }}
           title="Add Income"
           onConfirm={() => addIncomeFormRef.current?.addIncome()}
           confirmText="添加"
