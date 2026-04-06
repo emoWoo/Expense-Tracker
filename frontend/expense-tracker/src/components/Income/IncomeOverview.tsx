@@ -14,10 +14,11 @@ interface IncomeOverviewProps {
 }
 
 const IncomeOverview = ({ transactions, onAddIncome }: IncomeOverviewProps) => {
-  // const chartData = useMemo(
-  //   () => prepareIncomeBarChartData(transactions),
-  //   [transactions],
-  // );
+  const chartData = useMemo(
+    () => prepareIncomeBarChartData(transactions),
+    [transactions],
+  );
+  console.log("IncomeOverview chartData:", transactions);
 
   return (
     <div className="card">
@@ -35,7 +36,7 @@ const IncomeOverview = ({ transactions, onAddIncome }: IncomeOverviewProps) => {
         </button>
       </div>
       <div className="mt-10">
-        {/* <CustomBarChart data={chartData} type="income" /> */}
+        <CustomBarChart data={chartData} type="income" />
       </div>
     </div>
   );
