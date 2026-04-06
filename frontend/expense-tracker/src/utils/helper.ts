@@ -1,5 +1,7 @@
 import dayjs from "dayjs";
 import type { Transaction } from "../types/transaction";
+import { INCOME_SOURCE_CONFIG } from "../constants/incomeConfig";
+import { EXPENSE_CATEGORY_CONFIG } from "../constants/expenseConfig";
 export const validateEmail = (email: string): boolean => {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return regex.test(email);
@@ -27,21 +29,37 @@ export const addThounsandsSeparate = (num: number) => {
   return decimalPart ? `${formattedInteger}.${decimalPart}` : formattedInteger;
 };
 
-export const prepareExpenseBarChartData = (data: Transaction[]) => {
-  const chartData = data.map((item) => {
-    return {
-      category: item?.category || "其他",
-      amount: item?.amount || 0,
-    };
-  });
-
-  return chartData;
+export const prepareExpenseBarChartData = (
+  data: { date: string; expense: Transaction[] }[],
+) => {
+  return data
+    .map((item) => ({
+      date: dayjs(item.date).format("MM-DD"),
+      totalAmount: item.expense.reduce(
+        (sum, expenseItem) => sum + (expenseItem.amount || 0),
+        0,
+      ),
+      activity: item.expense.map((expenseItem) => ({
+        name:
+          EXPENSE_CATEGORY_CONFIG.find(
+            (configItem) => configItem.value === expenseItem.category,
+          )?.label || "其他",
+        amount: expenseItem.amount || 0,
+      })),
+    }))
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 };
 
 export const prepareIncomePieChartData = (data: Transaction[]) => {
   const chartData = data.map((item) => {
+    const sourceConfig =
+      INCOME_SOURCE_CONFIG.find(
+        (configItem) => configItem.value === item?.source,
+      ) ||
+      INCOME_SOURCE_CONFIG.find((configItem) => configItem.value === "other");
+
     return {
-      name: item?.source || "其他",
+      name: sourceConfig?.label || "其他",
       amount: item?.amount || 0,
     };
   });
@@ -49,15 +67,40 @@ export const prepareIncomePieChartData = (data: Transaction[]) => {
   return chartData;
 };
 
-export const prepareIncomeBarChartData = (data: Transaction[]) => {
-  const sortData = [...data].sort(
-    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-  );
-
-  const chartData = sortData.map((item) => ({
-    month: dayjs(item?.date).format("YYYY-MM"),
-    amount: item?.amount || 0,
-    source: item?.source || "其他",
-  }));
-  return chartData;
+export const prepareIncomeBarChartData = (
+  data: { date: string; income: Transaction[] }[],
+) => {
+  return data
+    .map((item) => ({
+      date: dayjs(item.date).format("MM-DD"),
+      totalAmount: item.income.reduce(
+        (sum, incomeItem) => sum + (incomeItem.amount || 0),
+        0,
+      ),
+      activity: item.income.map((incomeItem) => ({
+        name:
+          EXPENSE_CATEGORY_CONFIG.find(
+            (configItem) => configItem.value === incomeItem.category,
+          )?.label || "其他",
+        amount: incomeItem.amount || 0,
+      })),
+    }))
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+};
+export const prepareExpenseLineChartData = (
+  data: { date: string; expense: Transaction[] }[],
+) => {
+  return data
+    .map((item) => ({
+      date: dayjs(item.date).format("MM-DD"),
+      totalAmount: item.expense.reduce(
+        (sum, expenseItem) => sum + (expenseItem.amount || 0),
+        0,
+      ),
+      expense: item.expense.map((expenseItem) => ({
+        category: expenseItem.category || "其他",
+        amount: expenseItem.amount || 0,
+      })),
+    }))
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 };
