@@ -1,6 +1,7 @@
 import { LuArrowRight } from "react-icons/lu";
-import type { Transaction } from "../../pages/Dashboard/Home";
+import type { Transaction } from "../../types/transaction";
 import TransactionInfoCard from "../Cards/TransactionInfoCard";
+import { INCOME_SOURCE_CONFIG } from "../../constants/incomeConfig";
 import dayjs from "dayjs";
 
 interface RecentIncomeProps {
@@ -21,17 +22,22 @@ const RecentIncome = ({ transactions, onSeeMore }: RecentIncomeProps) => {
       </div>
 
       <div className="mt-6">
-        {transactions?.slice(0, 5)?.map((i) => (
-          <TransactionInfoCard
-            key={i._id}
-            title={i.source || ""}
-            icon={i.icon || ""}
-            date={dayjs(i.date).format("YYYY-MM-DD")}
-            amount={i.amount}
-            type="income"
-            hideDeleteBtn
-          />
-        ))}
+        {transactions?.slice(0, 5)?.map((i) => {
+          const sourceConfig =
+            INCOME_SOURCE_CONFIG.find((item) => item.value === i.source) ||
+            INCOME_SOURCE_CONFIG.find((item) => item.value === "other");
+          return (
+            <TransactionInfoCard
+              key={i._id}
+              icon={sourceConfig?.icon}
+              description={i.description}
+              date={dayjs(i.date).format("YYYY-MM-DD")}
+              amount={i.amount}
+              type="income"
+              hideDeleteBtn
+            />
+          );
+        })}
       </div>
     </div>
   );
