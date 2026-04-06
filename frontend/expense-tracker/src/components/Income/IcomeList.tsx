@@ -2,7 +2,7 @@ import { LuDownload } from "react-icons/lu";
 import type { Transaction } from "../../types/transaction";
 import TransactionInfoCard from "../Cards/TransactionInfoCard";
 import dayjs from "dayjs";
-import { INCOME_SOURCE_CONFIG } from "../../constants/income";
+import { INCOME_SOURCE_CONFIG } from "../../constants/incomeConfig";
 
 type IcomeListProps = {
   transactions: Transaction[];
@@ -31,8 +31,8 @@ const IcomeList = ({ transactions, onDelete, onDownload }: IcomeListProps) => {
         {transactions?.map((income) => (
           <TransactionInfoCard
             key={income._id}
-            title={income.description}
-            icon={config(income.source)?.icon ?? null}
+            description={income.description}
+            icon={config(income.source)?.icon}
             date={dayjs(income.date).format("YYYY-MM-DD")}
             amount={income.amount}
             type="income"
