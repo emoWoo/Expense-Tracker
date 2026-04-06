@@ -6,6 +6,7 @@ import type { IncomeFormData } from "../../types/income";
 
 export type AddIncomeFormRef = {
   addIncome: () => void;
+  resetForm: () => void;
 };
 
 type AddIncomeFormProps = {
@@ -42,6 +43,7 @@ const AddIncomeForm = forwardRef<AddIncomeFormRef, AddIncomeFormProps>(
 
     useImperativeHandle(ref, () => ({
       addIncome: handleSubmit,
+      resetForm: () => setIncome(initialIncome),
     }));
 
     return (
@@ -57,7 +59,7 @@ const AddIncomeForm = forwardRef<AddIncomeFormRef, AddIncomeFormProps>(
           label="描述"
           type="text"
           placeholder="输入收入描述"
-          value={income.amount ? income.amount.toString() : ""}
+          value={income.description ? income.description.toString() : ""}
           onChange={(e) => handleChange("description", e.target.value)}
         />
         <Input

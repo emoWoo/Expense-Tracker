@@ -35,7 +35,6 @@ type CustomTooltipProps = {
 };
 
 const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
-  console.log("CustomTooltip payload:", payload);
   if (active && payload && payload.length) {
     return (
       <div className="bg-white shadow-md rounded-lg p-2 border border-gray-300">
@@ -66,7 +65,6 @@ type CustomBarChartProps = {
   type: "income" | "expense";
 };
 const CustomBarChart = ({ data, type }: CustomBarChartProps) => {
-  console.log("CustomBarChart data:", data);
   return (
     <div className="bg-white mt-6">
       <ResponsiveContainer width="100%" height={300}>
