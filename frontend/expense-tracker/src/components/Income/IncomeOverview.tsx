@@ -18,7 +18,6 @@ const IncomeOverview = ({ transactions, onAddIncome }: IncomeOverviewProps) => {
     () => prepareIncomeBarChartData(transactions),
     [transactions],
   );
-  console.log("IncomeOverview chartData:", transactions);
 
   return (
     <div className="card">
