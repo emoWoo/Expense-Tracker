@@ -18,10 +18,12 @@ const CustomPieChart: React.FC<CustomPieChartProps> = ({
   colors,
   showTextAnchor,
 }) => {
-  const chartData = data.map((item, index) => ({
-    ...item,
-    fill: colors[index % colors.length],
-  }));
+  const chartData = data
+    .filter((item) => item.name !== "总余额")
+    .map((item, index) => ({
+      ...item,
+      fill: colors[index % colors.length],
+    }));
   return (
     <ResponsiveContainer width="100%" height={380}>
       <PieChart>

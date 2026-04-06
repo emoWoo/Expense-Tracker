@@ -9,11 +9,15 @@ import {
   Rectangle,
 } from "recharts";
 import { addThounsandsSeparate } from "../../utils/helper";
+import type { Transaction } from "../../types/transaction";
 
 type ChartDataItem = {
-  source?: string;
-  category?: string;
-  amount: number;
+  date: string;
+  activity: {
+    name: string;
+    amount: number;
+  }[];
+  totalAmount: number;
 };
 
 type TooltipPayloadItem = {
@@ -31,18 +35,24 @@ type CustomTooltipProps = {
 };
 
 const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
+  console.log("CustomTooltip payload:", payload);
   if (active && payload && payload.length) {
     return (
       <div className="bg-white shadow-md rounded-lg p-2 border border-gray-300">
         <p className="text-xs font-semibold text-purple-800 mb-1">
-          {payload[0].payload.category ||
-            payload[0].payload.source ||
-            "Unknown"}
+          {payload[0].payload?.date}
         </p>
+        <div className="space-y-1 mb-2">
+          {payload[0].payload?.activity.map((item, index) => (
+            <p key={`${item.name}-${index}`} className="text-xs text-gray-600">
+              {item.name || "abc"}: ¥{addThounsandsSeparate(item.amount)}
+            </p>
+          ))}
+        </div>
         <p className="text-sm text-gray-600">
           数目:{" "}
           <span className="text-sm font-medium text-gray-900">
-            ¥{addThounsandsSeparate(payload[0].payload.amount)}
+            ¥{addThounsandsSeparate(payload[0].payload.totalAmount)}
           </span>
         </p>
       </div>
@@ -56,20 +66,21 @@ type CustomBarChartProps = {
   type: "income" | "expense";
 };
 const CustomBarChart = ({ data, type }: CustomBarChartProps) => {
+  console.log("CustomBarChart data:", data);
   return (
     <div className="bg-white mt-6">
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={data}>
           <CartesianGrid stroke="#eee" vertical={false} />
           <XAxis
-            dataKey={type === "income" ? "source" : "category"}
+            dataKey="date"
             tick={{ fontSize: 12, fill: "#555" }}
             stroke="none"
           />
           <YAxis tick={{ fontSize: 12, fill: "#555" }} stroke="none" />
           <Tooltip content={<CustomTooltip />} />
           <Bar
-            dataKey="amount"
+            dataKey="totalAmount"
             radius={[10, 10, 0, 0]}
             fill="#FF8042"
             shape={(props) => {
