@@ -8,8 +8,8 @@ import type { IconType } from "react-icons";
 import { addThounsandsSeparate } from "../../utils/helper";
 
 interface TransactionInfoCardProps {
-  title: string | null;
-  icon: IconType | null;
+  icon?: IconType;
+  description?: string;
   date: string;
   amount: number;
   type: "income" | "expense";
@@ -18,8 +18,8 @@ interface TransactionInfoCardProps {
 }
 
 const TransactionInfoCard: React.FC<TransactionInfoCardProps> = ({
-  title,
   icon,
+  description,
   date,
   amount,
   type,
@@ -31,16 +31,17 @@ const TransactionInfoCard: React.FC<TransactionInfoCardProps> = ({
       ? "bg-green-100 text-green-500"
       : "bg-red-100 text-red-500";
   };
-  const Icon = icon ? icon : LuUtensils;
+
+  const Icon = icon;
+
   return (
     <div className=" group relative flex items-center gap-4 mt-2 p-3 rounded-lg hover:bg-gray-100/60">
       <div className="w-12 h-12 flex items-center justify-center text-xl text-gray-800 bg-gray-100 rounded-full">
-        <Icon />
+        {Icon ? <Icon size={22} /> : <LuUtensils size={22} />}
       </div>
-
       <div className="flex flex-1 items-center justify-between">
         <div>
-          <p className="text-sm text-gray-700 font-medium">{title}</p>
+          <p className="text-sm text-gray-700 font-medium">{description}</p>
           <p className="text-xs text-gray-400 mt-1">{date}</p>
         </div>
 
