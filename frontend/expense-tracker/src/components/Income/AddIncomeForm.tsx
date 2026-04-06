@@ -1,7 +1,7 @@
 import { forwardRef, useImperativeHandle, useState } from "react";
 import Selector from "../../components/Input/Selector";
 import Input from "../../components/Input/Input";
-import { INCOME_SOURCE_CONFIG } from "../../constants/income";
+import { INCOME_SOURCE_CONFIG } from "../../constants/incomeConfig";
 import type { IncomeFormData } from "../../types/income";
 
 export type AddIncomeFormRef = {
