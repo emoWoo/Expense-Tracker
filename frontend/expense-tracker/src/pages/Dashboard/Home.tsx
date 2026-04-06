@@ -23,6 +23,10 @@ interface DashboardData {
   last30DaysExpenses: {
     total: number;
     transactions: Transaction[];
+    expenseGroup: {
+      date: string;
+      expense: Transaction[];
+    }[];
   };
   last60DaysIncomes: {
     total: number;
@@ -72,19 +76,19 @@ const Home = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <InfoCard
             icon={<IoMdCard />}
-            label="Total Balance"
+            label="总余额"
             value={addThounsandsSeparate(dashboardData?.totalBalance || 0)}
             color="bg-primary"
           />
           <InfoCard
             icon={<LuWalletMinimal />}
-            label="Total Income"
+            label="总收入"
             value={addThounsandsSeparate(dashboardData?.totalIncome || 0)}
             color="bg-orange-500"
           />
           <InfoCard
             icon={<LuHandCoins />}
-            label="Total Expense"
+            label="总支出"
             value={addThounsandsSeparate(dashboardData?.totalExpense || 0)}
             color="bg-red-500"
           />
@@ -106,7 +110,7 @@ const Home = () => {
           />
 
           <Last30DaysExpenses
-            transactions={dashboardData?.last30DaysExpenses?.transactions || []}
+            transactions={dashboardData?.last30DaysExpenses?.expenseGroup || []}
           />
 
           <RecentIncomeWithChart
